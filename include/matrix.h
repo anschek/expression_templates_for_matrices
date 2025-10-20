@@ -21,14 +21,14 @@ public:
 	T &operator()(size_t i, size_t j);
 	const T &operator()(size_t i, size_t j) const;
 	void fill(const T &value);
-	void resize(size_t new_rows, size_t new_cols);
+	void resize(size_t new_rows, size_t new_cols, bool preserve = true);
 	size_t rows() const;
 	size_t cols() const;
 
 	// arithmetic operations
 	Matrix operator+(const Matrix &other) const;
-	Matrix  operator-() const;
-	Matrix  operator-(const Matrix &other) const;
+	Matrix  operator*(const T& scalar) const;
+	Matrix operator-(const Matrix &other) const;
 
 private:
 	size_t rows_, cols_;

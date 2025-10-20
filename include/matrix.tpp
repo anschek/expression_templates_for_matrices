@@ -21,12 +21,15 @@ Matrix<T>::Matrix() : rows_(0), cols_(0) {
 }
 
 template<typename T>
-Matrix<T>::Matrix(std::initializer_list<std::initializer_list<T>> data){
+Matrix<T>::Matrix(std::initializer_list<std::initializer_list<T> > data) {
 	rows_ = data.size();
 	cols_ = data.begin()->size();
 	data_.reserve(rows_ * cols_);
-	for (auto& row : data)
+	for (const auto &row: data) {
+		if (row.size() != cols_)
+			throw std::invalid_argument("All rows must have the same number of elements");
 		data_.insert(data_.end(), row.begin(), row.end());
+	}
 }
 
 template<typename T>
@@ -45,10 +48,24 @@ void Matrix<T>::fill(const T &value) {
 }
 
 template<typename T>
-void Matrix<T>::resize(size_t new_rows, size_t new_cols) {
+void Matrix<T>::resize(size_t new_rows, size_t new_cols, bool preserve) {
+	if (!preserve) {
+		rows_ = new_rows;
+		cols_ = new_cols;
+		data_.assign(new_rows * new_cols, T{});
+		return;
+	}
+	std::vector<T> new_data(new_rows * new_cols, T{});
+	size_t min_rows = std::min(rows_, new_rows);
+	size_t min_cols = std::min(cols_, new_cols);
+
+	for (size_t i = 0; i < min_rows; ++i)
+		for (size_t j = 0; j < min_cols; ++j)
+			new_data[i * new_cols + j] = std::move((*this)(i, j));
+
+	data_.swap(new_data);
 	rows_ = new_rows;
 	cols_ = new_cols;
-	data_.assign(new_rows * new_cols, 0);
 }
 
 template<typename T>
@@ -74,17 +91,17 @@ Matrix<T> Matrix<T>::operator+(const Matrix &other) const {
 }
 
 template<typename T>
-Matrix<T> Matrix<T>::operator-() const {
-		Matrix result(rows_, cols_);
+Matrix<T> Matrix<T>::operator*(const T& scalar) const {
+		Matrix result = *this;
 		for (size_t i = 0; i < rows_; ++i)
 			for (size_t j = 0; j < cols_; ++j)
-				result(i, j) = -(*this)(i, j);
+				result(i, j) *= scalar;
 		return result;
 }
 
 template<typename T>
 Matrix<T> Matrix<T>::operator-(const Matrix &other) const {
-	return *this + (-other);
+	return *this + other *-1;
 }
 
 template<typename T>

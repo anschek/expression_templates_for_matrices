@@ -33,12 +33,22 @@ Matrix<T>::Matrix(std::initializer_list<std::initializer_list<T> > data) {
 }
 
 template<typename T>
-T & Matrix<T>::operator()(size_t i, size_t j) {
+template<typename E>
+Matrix<T>::Matrix(const MatrixExpr<E, T> &expr)
+	: rows_(expr.rows()), cols_(expr.cols()), data_(rows_ * cols_) {
+	std::cout << "Matrix::construct from expression (" << rows_ << "x" << cols_ << ")\n";
+	for (size_t i = 0; i < rows_; ++i)
+		for (size_t j = 0; j < cols_; ++j)
+			(*this)(i, j) = expr(i, j);
+}
+
+template<typename T>
+T &Matrix<T>::operator()(size_t i, size_t j) {
 	return data_.at(i * cols_ + j);
 }
 
 template<typename T>
-const T& Matrix<T>::operator()(size_t i, size_t j) const {
+const T &Matrix<T>::operator()(size_t i, size_t j) const {
 	return data_.at(i * cols_ + j);
 }
 
@@ -79,32 +89,6 @@ size_t Matrix<T>::cols() const {
 }
 
 template<typename T>
-Matrix<T> Matrix<T>::operator+(const Matrix &other) const {
-	if (rows_ != other.rows_ || cols_ != other.cols_) {
-		throw std::invalid_argument("Matrix dimensions do not match");
-	}
-	Matrix result(rows_, cols_);
-	for (size_t i = 0; i < rows_; ++i)
-		for (size_t j = 0; j < cols_; ++j)
-			result(i, j) = (*this)(i, j) + other(i, j);
-	return result;
-}
-
-template<typename T>
-Matrix<T> Matrix<T>::operator*(const T& scalar) const {
-		Matrix result = *this;
-		for (size_t i = 0; i < rows_; ++i)
-			for (size_t j = 0; j < cols_; ++j)
-				result(i, j) *= scalar;
-		return result;
-}
-
-template<typename T>
-Matrix<T> Matrix<T>::operator-(const Matrix &other) const {
-	return *this + other *-1;
-}
-
-template<typename T>
 std::ostream &operator<<(std::ostream &out, const Matrix<T> &obj) {
 	for (size_t i = 0; i < obj.rows(); ++i) {
 		for (size_t j = 0; j < obj.cols(); ++j) {
@@ -116,7 +100,7 @@ std::ostream &operator<<(std::ostream &out, const Matrix<T> &obj) {
 }
 
 template<typename T>
-std::istream & operator>>(std::istream &in, Matrix<T> &obj) {
+std::istream &operator>>(std::istream &in, Matrix<T> &obj) {
 	size_t rows, cols;
 	if (!(in >> rows >> cols)) {
 		in.setstate(std::ios::failbit);

@@ -7,15 +7,17 @@
 #include <iosfwd>
 #include <optional>
 #include <vector>
+#include "matrix_base.h"
 
 template<typename T>
-class Matrix {
+class Matrix: public MatrixExpr<Matrix<T>,T> {
 public:
 	// constructors
 	Matrix(size_t rows, size_t cols);
 	Matrix(size_t rows, size_t cols, const T &init_value);
 	Matrix();
 	Matrix(std::initializer_list<std::initializer_list<T>> data);
+	template<typename E> Matrix(const MatrixExpr<E, T>& expr);
 
 	// indexing and standard functions
 	T &operator()(size_t i, size_t j);
@@ -24,11 +26,6 @@ public:
 	void resize(size_t new_rows, size_t new_cols, bool preserve = true);
 	size_t rows() const;
 	size_t cols() const;
-
-	// arithmetic operations
-	Matrix operator+(const Matrix &other) const;
-	Matrix  operator*(const T& scalar) const;
-	Matrix operator-(const Matrix &other) const;
 
 private:
 	size_t rows_, cols_;

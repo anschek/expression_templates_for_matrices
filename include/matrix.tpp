@@ -1,26 +1,26 @@
 //
 // Created by anschek on 17.10.2025.
 //
-
 #include <ostream>
 #include <istream>
 #include <stdexcept>
+#include <iostream>
 
-template<typename T>
+template<Arithmetic T>
 Matrix<T>::Matrix(size_t rows, size_t cols)
 	: rows_(rows), cols_(cols), data_(rows * cols) {
 }
 
-template<typename T>
+template<Arithmetic T>
 Matrix<T>::Matrix(size_t rows, size_t cols, const T &init_value)
 	: rows_(rows), cols_(cols), data_(rows * cols, init_value) {
 }
 
-template<typename T>
+template<Arithmetic T>
 Matrix<T>::Matrix() : rows_(0), cols_(0) {
 }
 
-template<typename T>
+template<Arithmetic T>
 Matrix<T>::Matrix(std::initializer_list<std::initializer_list<T> > data) {
 	rows_ = data.size();
 	cols_ = data.begin()->size();
@@ -32,7 +32,7 @@ Matrix<T>::Matrix(std::initializer_list<std::initializer_list<T> > data) {
 	}
 }
 
-template<typename T>
+template<Arithmetic T>
 template<typename E>
 Matrix<T>::Matrix(const MatrixExpr<E, T> &expr)
 	: rows_(expr.rows()), cols_(expr.cols()), data_(rows_ * cols_) {
@@ -42,22 +42,22 @@ Matrix<T>::Matrix(const MatrixExpr<E, T> &expr)
 			(*this)(i, j) = expr(i, j);
 }
 
-template<typename T>
+template<Arithmetic T>
 T &Matrix<T>::operator()(size_t i, size_t j) {
 	return data_.at(i * cols_ + j);
 }
 
-template<typename T>
+template<Arithmetic T>
 const T &Matrix<T>::operator()(size_t i, size_t j) const {
 	return data_.at(i * cols_ + j);
 }
 
-template<typename T>
+template<Arithmetic T>
 void Matrix<T>::fill(const T &value) {
 	data_.assign(rows_ * cols_, value);
 }
 
-template<typename T>
+template<Arithmetic T>
 void Matrix<T>::resize(size_t new_rows, size_t new_cols, bool preserve) {
 	if (!preserve) {
 		rows_ = new_rows;
@@ -78,17 +78,17 @@ void Matrix<T>::resize(size_t new_rows, size_t new_cols, bool preserve) {
 	cols_ = new_cols;
 }
 
-template<typename T>
+template<Arithmetic T>
 size_t Matrix<T>::rows() const {
 	return rows_;
 }
 
-template<typename T>
+template<Arithmetic T>
 size_t Matrix<T>::cols() const {
 	return cols_;
 }
 
-template<typename T>
+template<Arithmetic T>
 std::ostream &operator<<(std::ostream &out, const Matrix<T> &obj) {
 	for (size_t i = 0; i < obj.rows(); ++i) {
 		for (size_t j = 0; j < obj.cols(); ++j) {
@@ -99,7 +99,7 @@ std::ostream &operator<<(std::ostream &out, const Matrix<T> &obj) {
 	return out;
 }
 
-template<typename T>
+template<Arithmetic T>
 std::istream &operator>>(std::istream &in, Matrix<T> &obj) {
 	size_t rows, cols;
 	if (!(in >> rows >> cols)) {

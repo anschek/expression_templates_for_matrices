@@ -4,8 +4,8 @@
 
 #include <sstream>
 
-template<typename LHS, typename RHS, typename T>
-MultExpr<LHS, RHS, T>::MultExpr(const LHS &lhs, const RHS &rhs) : lhs_(lhs), rhs_(rhs), n_(lhs.cols()) {
+template<typename LHS, typename RHS>
+MultExpr<LHS, RHS>::MultExpr(const LHS &lhs, const RHS &rhs) : lhs_(lhs), rhs_(rhs), n_(lhs.cols()) {
 	if (n_ != rhs.rows()) {
 		std::stringstream ss;
 		ss << "Matrix dimensions do not match: left cols " << n_ << " != right rows " << rhs.rows();
@@ -13,20 +13,20 @@ MultExpr<LHS, RHS, T>::MultExpr(const LHS &lhs, const RHS &rhs) : lhs_(lhs), rhs
 	}
 }
 
-template<typename LHS, typename RHS, typename T>
-size_t MultExpr<LHS, RHS, T>::rows() const {
+template<typename LHS, typename RHS>
+size_t MultExpr<LHS, RHS>::rows() const {
 	return lhs_.rows();
 }
 
-template<typename LHS, typename RHS, typename T>
-size_t MultExpr<LHS, RHS, T>::cols() const {
+template<typename LHS, typename RHS>
+size_t MultExpr<LHS, RHS>::cols() const {
 	return rhs_.cols();
 }
 
-template<typename LHS, typename RHS, typename T>
-T MultExpr<LHS, RHS, T>::operator()(size_t i, size_t j) const {
+template<typename LHS, typename RHS>
+MultExpr<LHS, RHS>::value_type MultExpr<LHS, RHS>::operator()(size_t i, size_t j) const {
 	std::cout << "MultExpr::operator() -> computing (" << i << ", " << j << ")\n";
-	T sum{};
+	value_type sum{};
 	for (size_t k = 0; k < n_; ++k)
 		sum += lhs_(i, k) * rhs_(k, j);
 	return sum;

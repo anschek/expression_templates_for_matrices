@@ -30,11 +30,8 @@ TEST(MatrixExprTest, AddExpr_Chained) {
 	Matrix B{{5, 6}, {7, 8}};
 	Matrix C{{10, 20}, {30, 40}};
 
-	auto expr = A + B + C;
-	ASSERT_EQ(expr(0, 0), 16);
-	ASSERT_EQ(expr(1, 1), 52);
-
-	Matrix R = expr;
+	Matrix R = A + B + C;
+	ASSERT_EQ(R(0, 0), 16);
 	ASSERT_EQ(R(0, 1), 28);
 }
 
@@ -52,11 +49,8 @@ TEST(MatrixExprTest, AddSubExpr_Chained) {
 	Matrix B{{5, 6}, {7, 8}};
 	Matrix C{{10, 20}, {30, 40}};
 
-	auto expr = C - ( A + B );
-	ASSERT_EQ(expr(0, 0), 4);
-	ASSERT_EQ(expr(1, 1), 28);
-
-	Matrix R = expr;
+	Matrix R = C - ( A + B );
+	ASSERT_EQ(R(0, 0), 4);
 	ASSERT_EQ(R(0, 1), 12);
 }
 

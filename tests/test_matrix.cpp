@@ -73,7 +73,7 @@ TEST(MatrixTest, Resize_ObjectResizedAndCleared) {
 }
 
 TEST(MatrixTest, Input_ObjectRead) {
-	std::ifstream file(R"(..\data\matrix_samples.txt)");
+	std::ifstream file("data/matrix_samples.txt");
 	Matrix<int> m;
 	if (file.is_open()) {
 		try {

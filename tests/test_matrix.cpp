@@ -36,6 +36,10 @@ TEST(MatrixTest, Constructor_ObjectCreated) {
 	std::cout << m2 << '\n';
 }
 
+TEST(MatrixTest, Constructor_ThrowException) {
+	ASSERT_THROW(Matrix<int>({{1,2},{1,2,3}}), std::invalid_argument);
+}
+
 TEST(MatrixTest, Fill_Filled) {
 	size_t m=3, n=4;
 	Matrix<int> m0(m, n);
@@ -48,44 +52,24 @@ TEST(MatrixTest, Fill_Filled) {
 TEST(MatrixTest, Resize_ObjectResizedAndCleared) {
 	size_t m=2, n=5;
 	Matrix<int> m0;
-	m0.resize(m, n);
+	m0.resize(m, n, false);
 	ASSERT_EQ(m0.rows(), m);
 	ASSERT_EQ(m0.cols(), n);
 	for (size_t i = 0; i < m; ++i)
 		for (size_t j = 0; j < n; ++j)
 			ASSERT_EQ(m0(i,j), 0);
-}
 
-TEST(MatrixTest, Addition_ReturnOfSumObject) {
-	size_t m=2, n=5;
-	Matrix m0(2,5,7);
-	Matrix m1(2,5,3);
+	Matrix m1 ({{1,2},{3,4}});
+	Matrix m2 = m1;
+	m2.resize(3, 3, true);
+	ASSERT_EQ(m2.rows(), 3);
+	ASSERT_EQ(m2.cols(), 3);
+	for (size_t i = 0; i < 2; ++i)
+		for (size_t j = 0; j < 2; ++j)
+			ASSERT_EQ(m1(i,j), m2(i,j));
+	std::cout << m1 << '\n';
+	std::cout << m2 << '\n';
 
-	Matrix m2 = m0 + m1;
-	ASSERT_EQ(m2.rows(), m);
-	ASSERT_EQ(m2.cols(), n);
-	for (size_t i = 0; i < m; ++i)
-		for (size_t j = 0; j < n; ++j)
-			ASSERT_EQ(m2(i,j), 10);
-}
-
-TEST(MatrixTest, Subtraction_ReturnDififferenceObject) {
-	size_t m=2, n=5;
-	Matrix m0(2,5,3.5);
-	m0 = -m0;
-	ASSERT_EQ(m0.cols(), n);
-	for (size_t i = 0; i < m; ++i)
-		for (size_t j = 0; j < n; ++j)
-			ASSERT_EQ(m0(i,j), -3.5);
-
-	const Matrix m1(2,5,8.0);
-
-	Matrix<double> m2 = m1 - m0;
-	ASSERT_EQ(m2.rows(), m);
-	ASSERT_EQ(m2.cols(), n);
-	for (size_t i = 0; i < m; ++i)
-		for (size_t j = 0; j < n; ++j)
-			ASSERT_EQ(m2(i,j), 11.5);
 }
 
 TEST(MatrixTest, Input_ObjectRead) {

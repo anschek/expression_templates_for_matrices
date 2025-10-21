@@ -20,6 +20,7 @@ target_include_directories(expression_templates PRIVATE include)
 
 add_executable(tests
         tests/test_matrix.cpp
+        tests/test_matrix_expressions.cpp
 )
 
 target_link_libraries(tests PRIVATE gtest_main gtest)

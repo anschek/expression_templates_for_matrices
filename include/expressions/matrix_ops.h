@@ -50,4 +50,32 @@ private:
 };
 #include "scalar_mult_expr.tpp"
 
+template<typename E, typename T>
+class TransposeExpr : public MatrixExpr<TransposeExpr<E, T>, T> {
+public:
+	TransposeExpr(const E &expr);
+	size_t rows() const;
+	size_t cols() const;
+	T operator()(size_t i, size_t j) const;
+
+private:
+	const E &expr_;
+};
+#include "transpose_expr.tpp"
+
+template<typename LHS, typename RHS, typename T>
+class MultExpr : public MatrixExpr<MultExpr<LHS, RHS, T>, T> {
+public:
+	MultExpr(const LHS &lhs, const RHS &rhs);
+	size_t rows() const;
+	size_t cols() const;
+	T operator()(size_t i, size_t j) const;
+
+private:
+	const LHS &lhs_;
+	const RHS &rhs_;
+	size_t n_;
+};
+#include "mult_expr.tpp"
+
 #endif //EXPRESSION_TEMPLATES_FOR_MATRICES_OPS_H

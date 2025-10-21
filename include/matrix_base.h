@@ -16,7 +16,8 @@ public:
 	template<typename Other> AddExpr<Derived,Other,T> operator+(const MatrixExpr<Other, T> &other) const;
 	template<typename Other> SubExpr<Derived,Other,T> operator-(const MatrixExpr<Other, T> &other) const;
 	ScalarMultExpr<Derived,T> operator*(double alpha) const;
-
+	TransposeExpr<Derived,T> transpose() const;
+	template<typename Other> MultExpr<Derived, Other, T> operator*(const MatrixExpr<Other, T> &other) const;
 };
 
 #include "matrix_base.tpp"

@@ -4,8 +4,12 @@
 
 #include <fstream>
 
-#include "matrix.h"
+#include "matrices/matrix.h"
 #include <gtest/gtest.h>
+
+#include "matrices/diagonal_matrix.h"
+#include "matrices/identity_matrix.h"
+#include "matrices/zero_matrix.h"
 
 TEST(MatrixTest, Constructor_ObjectCreated) {
 	Matrix<int> m0{};
@@ -86,4 +90,40 @@ TEST(MatrixTest, Input_ObjectRead) {
 	} else {
 		FAIL();
 	}
+}
+
+TEST(MatrixTest, ZeroMatrix_CorrectObject) {
+	ZeroMatrix O(5,6);
+	ASSERT_EQ(O(0,0), 0);
+	ASSERT_THROW(O(0,6), std::out_of_range);
+	ASSERT_THROW(O(5,0), std::out_of_range);
+	std::cout << O << '\n';
+
+	Matrix OA = O;
+	ASSERT_EQ(OA.rows(), 5);
+	ASSERT_EQ(OA.cols(), 6);
+}
+
+TEST(MatrixTest, DiagonalMatrix_CorrectObject) {
+	DiagonalMatrix A({5,6,7});
+	ASSERT_EQ(A(1,1), 6);
+	ASSERT_EQ(A(1,0), 0);
+	ASSERT_THROW(A(1,3), std::out_of_range);
+	std::cout << A << '\n';
+
+	Matrix B = A;
+	ASSERT_EQ(B.rows(), 3);
+	ASSERT_EQ(B.cols(), 3);
+}
+
+TEST(MatrixTest, IdentityMatrix_CorrectObject) {
+	IdentityMatrix I(3);
+	ASSERT_EQ(I(0,0), 1);
+	ASSERT_EQ(I(0,2), 0);
+	ASSERT_THROW(I(0,3), std::out_of_range);
+	std::cout << I << '\n';
+
+	Matrix OI = I;
+	ASSERT_EQ(OI.rows(), 3);
+	ASSERT_EQ(OI.cols(), 3);
 }

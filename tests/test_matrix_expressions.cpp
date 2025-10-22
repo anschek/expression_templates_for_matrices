@@ -2,8 +2,12 @@
 // Created by anschek on 20.10.2025.
 //
 
-#include "matrix.h"
+#include "matrices/matrix.h"
 #include <gtest/gtest.h>
+
+#include "matrices/diagonal_matrix.h"
+#include "matrices/identity_matrix.h"
+#include "matrices/zero_matrix.h"
 
 TEST(MatrixExprTest, AddExpr_Structure) {
 	Matrix A{{1, 2}, {3, 4}};
@@ -99,4 +103,15 @@ TEST(MatrixExprTest, MultExpr_Evaluation) {
 	for (int i = 0; i < A.rows(); ++i)
 		for (int j = 0; j < B.cols(); ++j)
 			ASSERT_EQ(D(i,j), C(i,j));
+}
+
+TEST(MatrixExprTest, SpecialTypes_Chained) {
+	ZeroMatrix A{3,3};
+	DiagonalMatrix B{3,4,5};
+	IdentityMatrix C{3};
+
+	Matrix D = A + B + C;
+	ASSERT_EQ(D(0, 0), 4);
+	ASSERT_EQ(D(2, 2), 6);
+	ASSERT_EQ(D(0, 2), 0);
 }

@@ -2,8 +2,10 @@
 // Created by anschek on 21.10.2025.
 //
 
-#include "matrix.h"
+#include "matrices/matrix.h"
 #include <gtest/gtest.h>
+#include <iostream>
+#include "matrices/identity_matrix.h"
 
 template<Arithmetic T>
 struct OnlyArithmetic { using type = T; };
@@ -19,14 +21,25 @@ TEST(InfrastructureTest, Concept_Arithmetic) {
 }
 
 TEST(InfrastructureTest, CommonType_CastExpr) {
-	Matrix A{{1,2},{3,4}};
+	Matrix<int> A{{1,2},{3,4}};
 	Matrix<double> B{{1.1,2},{3.3,4}};
 	Matrix C = A + B;
 	Matrix D = A - B;
 	Matrix E = A * B;
-	Matrix F = A * 2.5;
+	Matrix F = 7.5 * A * 3;
 	ASSERT_TRUE((std::is_same_v<Matrix<double>, decltype(C)>));
 	ASSERT_TRUE((std::is_same_v<Matrix<double>, decltype(D)>));
 	ASSERT_TRUE((std::is_same_v<Matrix<double>, decltype(E)>));
-	std::cout << C << '\n' << D << '\n' << E << '\n';
+	ASSERT_TRUE((std::is_same_v<Matrix<double>, decltype(F)>));
+	std::cout << C << '\n' << D << '\n' << E << '\n' << F << '\n';
+}
+
+TEST(InfrastructureTest, CommonType_SpecialTypes) {
+	IdentityMatrix I(3);
+	Matrix A (3,3,5.2);
+	Matrix B = A + I;
+	ASSERT_TRUE((std::is_same_v<Matrix<double>, decltype(B)>));
+	ASSERT_EQ(B.rows(), 3);
+	ASSERT_EQ(B.cols(), 3);
+	ASSERT_EQ(B(0,0), 6.2);
 }

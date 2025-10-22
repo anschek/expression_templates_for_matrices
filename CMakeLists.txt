@@ -24,6 +24,9 @@ add_executable(tests
         tests/test_matrix.cpp
         tests/test_matrix_expressions.cpp
         tests/test_infrastructure.cpp
+        tests/test_analysis.cpp
+        src/matrices/zero_matrix.cpp
+        src/matrices/identity_matrix.cpp
 )
 target_link_libraries(tests PRIVATE gtest_main gtest)
 target_include_directories(tests PRIVATE include)

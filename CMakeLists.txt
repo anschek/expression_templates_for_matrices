@@ -14,7 +14,10 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 enable_testing()
 
-add_executable(expression_templates src/main.cpp)
+add_executable(expression_templates src/main.cpp
+        src/matrices/zero_matrix.cpp
+        src/matrices/identity_matrix.cpp
+)
 target_include_directories(expression_templates PRIVATE include)
 
 add_executable(tests

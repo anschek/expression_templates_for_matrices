@@ -31,8 +31,7 @@ private:
 	size_t rows_, cols_;
 	std::vector<T> data_;
 };
-
-template<Arithmetic T> std::ostream& operator<< (std::ostream& out, const Matrix<T>& obj);
+template<typename Derived, Arithmetic T> std::ostream& operator<<(std::ostream& out, const MatrixExpr<Derived, T>& expr);
 template<Arithmetic T> std::istream& operator>>(std::istream& in, Matrix<T>& obj);
 
 // ---DEFINITION---
@@ -119,11 +118,11 @@ size_t Matrix<T>::cols() const {
 	return cols_;
 }
 
-template<Arithmetic T>
-std::ostream &operator<<(std::ostream &out, const Matrix<T> &obj) {
-	for (size_t i = 0; i < obj.rows(); ++i) {
-		for (size_t j = 0; j < obj.cols(); ++j) {
-			out << obj(i, j) << ' ';
+template<typename Derived, Arithmetic T>
+std::ostream& operator<<(std::ostream& out, const MatrixExpr<Derived, T>& expr) {
+	for (size_t i = 0; i < expr.rows(); ++i) {
+		for (size_t j = 0; j < expr.cols(); ++j) {
+			out << expr(i, j) << ' ';
 		}
 		out << '\n';
 	}

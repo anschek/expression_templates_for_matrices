@@ -3,6 +3,24 @@
 //
 
 #include <sstream>
+template<typename Derived, Arithmetic T> class MatrixExpr;
+
+template<typename LHS, typename RHS>
+class MultExpr : public MatrixExpr<MultExpr<LHS, RHS>, common_value_t<LHS, RHS>> {
+public:
+	using value_type = common_value_t<LHS, RHS>;
+	MultExpr(const LHS &lhs, const RHS &rhs);
+	size_t rows() const;
+	size_t cols() const;
+	value_type operator()(size_t i, size_t j) const;
+
+private:
+	const LHS &lhs_;
+	const RHS &rhs_;
+	size_t n_;
+};
+
+// ---DEFINITION---
 
 template<typename LHS, typename RHS>
 MultExpr<LHS, RHS>::MultExpr(const LHS &lhs, const RHS &rhs) : lhs_(lhs), rhs_(rhs), n_(lhs.cols()) {
